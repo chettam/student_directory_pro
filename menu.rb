@@ -1,11 +1,15 @@
+
 #Module managing the menues and sub menues
 module Menu
-
+   require './prompt.rb'
+   require './student.rb'
+   require './list_student.rb'
+   require './directory.rb'
 # menu for the student directory
 def self.interactive_menu # can be split into two methods
   loop do
     print_menu
-    process(prompt)
+    process(Prompt.simple_prompt)
   end
 end
 
@@ -13,16 +17,16 @@ end
 def self.interactive_sub_menu
   loop do
     print_sub_menu
-    process_sub_menu(prompt)
+    process_sub_menu(Prompt.simple_prompt)
   end
 end
 
 
 # print menu choice
 def self.print_menu
-  print_separator
+  Prompt.print_separator
   puts "Welcome to Makers Academy directory"
-  print_separator
+  Prompt.print_separator
   puts "\t 1 - Add a new student"
   puts "\t 2 - Modify an existing student"
   puts "\t 3 - Delete an existing student"
@@ -31,39 +35,40 @@ def self.print_menu
   puts "\t 6 - Remove field from the directory"
   puts "\t 7 - list the current fields"
   puts "\t E - Exit"
-  print_separator
+  Prompt.print_separator
 end
 
 #print sub menu choice
 def self.print_sub_menu
-  print_separator
+  Prompt.print_separator
   puts "choose your list :"
-  print_separator
+  Prompt.print_separator
   puts "\t 1 - List all the students"
   puts "\t 2 - List student by specific cohort"
   puts "\t 3 - Search Student by field"  
   puts "\t 4 - List student's filtered by firstnames length"
   puts "\t R - Return to main menu"
-  print_separator
+  Prompt.print_separator
 end
 
 # handle choice selection
 def self.process(selection)
+  student = Student.new
   case selection
   when "1"
-    input_student   
+    student.input_student   
   when "2"
-    modify_student
+    student.modify_student
   when "3"
-    delete_student
+    student.delete_student
   when "4"
     interactive_sub_menu
   when "5"
-    add_directory_field
+    Field.add_directory_field
   when "6"
-    delete_directory_field
+    Field.delete_directory_field
   when "7"
-    list_directory_field
+    Field.list_directory_field
   when "E" 
     exit
   else
@@ -73,15 +78,16 @@ end
 
 #handle choice in sub menu
 def self.process_sub_menu(selection)
+  list_student=ListStudent.new
   case selection
   when "1"
-    list_student   
+    list_student.list_student
   when "2"
-    list_student_cohort
+    list_student.list_student_cohort
   when "3"
-    search_student
+    list_student.search_student
   when "4"
-    list_student_name_length
+    list_student.list_student_name_length
   when /r/i
     interactive_menu
   else
